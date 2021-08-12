@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>来永超 贺彩</title>
+        <!-- 播放器css -->
+        <link rel="stylesheet" href="./hecai/common.css">
+        <!-- 相册css -->
+        <link type="text/css" href="./hecai/style.css" rel="stylesheet">
+        <script id="jqbb" src="./hecai/jquery.min.js.下载"></script>
+		
+    <style type="text/css">
+        body {
+            margin: 0;
+            position: relative;
+        }
+
+        .raining {
+            display: block;
+        }
+      /* 背景图片 */
+        .backimg {
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: url(img/20.jpg);
+            height: 100%;
+            width: 100%;
+            opacity: 0.3;
+        }
+
+        .audio {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 烟花 -->
+    <canvas class="raining" width="1920" height="881"></canvas>
+    <!-- 打字 -->
+    <div class="typing">
+    <!-- 字幕 -->
+    <h2 class="header-sub-title" id="word"> </h2>
+    <h2 class="header-sub-title blink">|</h2>
+    </div>
+    <!-- 相册 -->
+    <div class="box">
+        <ul class="minbox">
+
+		  <li><img src="./hecai/002.jpg"></li>
+          <li><img src="./hecai/001.jpg"></li>
+          <li><img src="./hecai/002.jpg"></li>
+          <li><img src="./hecai/002.jpg"></li>
+          <li><img src="./hecai/002.jpg"></li>
+          <li><img src="./hecai/002.jpg"></li>
+        </ul>
+        <ol class="maxbox">
+          <li><img src="./hecai/1.jpg"></li>
+          <li><img src="./hecai/2.jpg"></li>
+          <li><img src="./hecai/3.jpg"></li>
+          <li><img src="./hecai/3.jpg"></li>
+          <li><img src="./hecai/6.jpg"></li>
+          <li><img src="./hecai/6.jpg"></li>
+        </ol>
+      </div>
+     <!-- 播放器 -->
+    <div id="app">
+	
+        <div class="container_player">
+		<audio autoplay="autoplay" controls="controls" loop="loop" preload="auto"
+							src="xqg.mp3">			
+				
+				</audio>
+          <div class="music-box mplaying">
+		  
+            <!-- 播放器相片 -->
+            <img src="./hecai/01.png">
+			
+					
+            <div class="mask">
+			
+              <div class="mplayer" onclick="play"
+			  			
+						</audio>
+                <i class="fa">
+				 
+                  <span class="before"></span>
+				  
+                  <span class="after"></span>
+                </i>
+                <svg class="loadingSvg" width="25" height="25" viewBox="0,0,50,50" style="
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                  ">
+				  
+                  <circle></circle>
+				  
+                </svg>
+				
+              </div>
+			  
+              <div class="m-circle m-progress">
+                <svg width="163" height="163" viewBox="0,0,163,163">
+                  <circle cx="81" cy="81" r="159" stroke-width="8" stroke="rgba(255, 206, 113, 0.2)" fill="rgba(0,0,0,.2)"></circle>
+                  <circle class="a" cx="81" cy="81" r="159" stroke-width="6" stroke="rgba(255, 206, 113, 1)" fill="none" stroke-dasharray="74.43092542682076 1005.3096491487338" transform="matrix(0,-1,1,0,0,163)"></circle>
+                </svg>
+              </div>
+              <div class="m_time">
+                <span class="mplayer_curtime">00:20</span>
+                <span class="m-join">/</span>
+                <span class="mplayer_durtime">04:30</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 音乐 
+	  <audio autoplay="autoplay" controls="controls"loop="loop" preload="auto"
+							src="thz.mp3">			
+				
+				</audio>
+
+      <audio id="myAudio" controls="controls"loop="loop" preload="auto" src="xqg.mp3"></audio>
+	  -->
+	  
+    <div class="backimg"></div>
+
+<script type="text/javascript" src="./hecai/christmassnow.js.下载"></script>
+<script src="./hecai/common.js.下载"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    /* 自动播放音乐 */
+  play()
+  
+})
+/* 烟花 */
+    var canvas = document.querySelector(".raining");
+    var w, h;
+    ~~ function setSize() { //定义canvas的宽高，让他跟浏览器的窗口的宽高相同
+        window.onresize = arguments.callee;
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = w;
+        canvas.height = h;
+    }();
+
+    var canCon = canvas.getContext("2d"); //建立2d画板
+    var arain = []; //新建数组,储存雨滴
+    //
+    function random(min, max) { //返回最小值到最大值之间的值
+        return Math.random() * (max - min) + min;
+    }
+
+    function rain() {};
+    rain.prototype = {
+        init: function() { //变量初始化
+            this.x = random(0, w); //在0-w之间生成雨滴
+            this.vx = 0.1;
+            this.y = h; //起点在下面
+            this.vy = random(4, 5);
+            this.h = random(0.1 * h, 0.4 * h); //地板高度
+            this.r = 1; //雨滴绽放的半径
+            this.vr = 1;
+            this.colos = Math.floor(Math.random() * 1000);
+        },
+        draw: function() {
+
+            if (this.y > this.h) {
+                canCon.beginPath(); //拿起一支笔
+                canCon.fillStyle = '#' + this.colos; //笔墨的颜色，随机变化的颜色
+                canCon.fillRect(this.x, this.y, 3, 10); //想象画一个雨滴
+            } else {
+                canCon.beginPath(); //拿起一支笔
+                canCon.strokeStyle = '#' + this.colos; //笔墨的颜色
+                canCon.arc(this.x, this.y, this.r, 0, Math.PI * 2); //想象画一个圆
+                canCon.stroke(); //下笔作画
+            }
+        },
+        move: function() { //重点是判断和初始位置。其他无大变化
+            if (this.y > this.h) { //位置判断
+                this.y += -this.vy; //从下往上				
+
+            } else {
+                if (this.r < 100) { //绽放的大小
+                    this.r += this.vr;
+                } else {
+                    this.init(); //放完后回归变量原点
+                }
+
+            }
+            this.draw(); //开始作画
+
+        }
+    }
+
+    function createrain(num) {
+        for (var i = 0; i < num; i++) {
+            setTimeout(function() {
+                var raing = new rain(); //创建一滴雨
+                raing.init();
+                raing.draw();
+                arain.push(raing);
+            }, 800 * i) //每隔150ms下落一滴雨
+        }
+    }
+    createrain(10); //雨滴数量
+    setInterval(function() {
+        canCon.fillStyle = "rgba(0,0,0,0.1)"; //拿起一支透明0.13的笔		
+        canCon.fillRect(0, 0, w, h); //添加蒙版 控制雨滴长度
+        for (var item of arain) {
+            //item of arain指的是数组里的每一个元素
+            //item in arain指的是数组里的每一个元素的下标（包括圆形连上的可遍历元素）
+            item.move(); //运行整个move事件
+        }
+    }, 1000 / 60); //上升时间
+
+
+    
+     // -----------打印字-----------
+     const words = [
+      "❤ 宝宝~这是我们的第一个七夕",
+      "❉ 曾经沧海难为水，除却巫山不是云",
+      "❉ 忘不掉那句“哇，你好好看~”",
+      "❉ 也忘不掉我们一起的许多开怀大笑",
+      "❉ 秋月皎皎",
+      "❉ 秋水淼淼",
+      "❉ 宝宝，七夕到了",
+      "❉ 我愿陪着你度过以后的每一个七夕",
+    ];
+    let i = 0;
+    let timer;
+    // speed in ms
+    let deleteDelay = 3000;
+    let typeSpeed = 100;
+    let delSpeed = 50;
+    /* 开始编写文字 */
+    function typingEffect() {
+      let word = words[i].split("");
+      var loopTyping = function () {
+        if (word.length > 0) {
+          document.getElementById("word").innerHTML += word.shift();
+        } else {
+          delay(function () {
+            deletingEffect(); // do stuff
+          }, deleteDelay); // end delay
+          // deletingEffect();
+          return false;
+        }
+        timer = setTimeout(loopTyping, typeSpeed);
+      };
+      loopTyping();
+    }
+
+    function deletingEffect() {
+      let word = words[i].split("");
+      var loopDeleting = function () {
+        if (word.length > 0) {
+          word.pop();
+          document.getElementById("word").innerHTML = word.join("");
+        } else {
+          if (words.length > i + 1) {
+            i++;
+          }
+          else {
+            i = 0;
+          }
+          typingEffect();
+          return false;
+        }
+
+        timer = setTimeout(loopDeleting, delSpeed);
+      };
+
+      loopDeleting();
+    }
+
+    var delay = (function () {
+      var timer = 0;
+      return function (callback, ms) {
+        clearTimeout(timer);
+        timer = setTimeout(callback, ms);
+      };
+    })();
+    /* 开始打印字 */
+    typingEffect();
+ 
+</script>
+
+<div class="xl-chrome-ext-bar" id="xl_chrome_ext_{4DB361DE-01F7-4376-B494-639E489D19ED}" style="display: none;">
+      <div class="xl-chrome-ext-bar__logo"></div>
+
+      <a id="xl_chrome_ext_download" href="javascript:;" class="xl-chrome-ext-bar__option">下载视频</a>
+      <a id="xl_chrome_ext_close" href="javascript:;" class="xl-chrome-ext-bar__close"></a>
+    </div></body></html>
